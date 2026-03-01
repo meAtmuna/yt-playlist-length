@@ -1,5 +1,15 @@
 const enterBtn = document.getElementById("enter-btn");
-const apiKey = "AIzaSyDNIXwgFQ8hIxv28a-Tdx14Cf1OmjmcPQA";
+const apiKey = "";
+
+function isoConvert(time) {
+    const result = time.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+
+    const hrs = parseInt(result[1] || 0)
+    const mins = parseInt(result[2] || 0)
+    const sec = parseInt(result[3] || 0)
+
+    return hrs * 3600 + mins * 60 + sec;
+}
 
 enterBtn.addEventListener("click", ()=>{
     let urlInput = document.getElementById("playlist-url").value;
@@ -29,9 +39,13 @@ enterBtn.addEventListener("click", ()=>{
                     for (let i = 0; i < videoData.items.length; i++) {
 
                         let duration = videoData.items[i].contentDetails.duration;
-                        console.log("video durataion ===>", duration);
+                        let seconds = isoConvert(duration);
+                        // console.log("video durataion ===>", duration);
                         
+                        console.log(seconds);
+
                     }
+                    
                 })
                 .catch((error)=>{
                     console.log("erro ===>", error);
