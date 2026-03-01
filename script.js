@@ -11,6 +11,15 @@ function isoConvert(time) {
     return hrs * 3600 + mins * 60 + sec;
 }
 
+function readableTime(totalSec) {
+    
+    let hrs = Math.floor(totalSec / 3600);
+    let mins = Math.floor(totalSec  % 3600 / 60);
+    let sec = totalSec % 60;
+
+    return `${hrs.toString().padStart(2,"0")}:${mins.toString().padStart(2,"0")}:${sec.toString().padStart(2,"0")}`;
+}
+
 enterBtn.addEventListener("click", ()=>{
     let urlInput = document.getElementById("playlist-url").value;
 
@@ -35,6 +44,8 @@ enterBtn.addEventListener("click", ()=>{
                 .then((res) => res.json())
                 .then((videoData) => {
                     console.log("result ===>",videoData.items);
+
+                    let totalSec = 0;
                     
                     for (let i = 0; i < videoData.items.length; i++) {
 
@@ -42,9 +53,13 @@ enterBtn.addEventListener("click", ()=>{
                         let seconds = isoConvert(duration);
                         // console.log("video durataion ===>", duration);
                         
-                        console.log(seconds);
+                        totalSec += seconds;
+                        console.log("seconds ===>",seconds);
 
                     }
+                    console.log("total seconds ===> ",totalSec);
+                    console.log("hrs mins sec === >", readableTime(totalSec));
+                    
                     
                 })
                 .catch((error)=>{
