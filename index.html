@@ -7,9 +7,24 @@
 </head>
 <body>
     <h1>Youtube Playlist length</h1>
-    <input type="url" id="playlist-url">
-    <button id="enter-btn">Enter</button>
+    <input type="url" id="playlist-url" placeholder="Paste Youtube Playlist Url">
+    <button id="enter-btn">Get Playlist length</button>
     <div id="result"></div>
+
+    <style>
+        body{
+            background-color: aquamarine;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        #result{
+            height: 200px;
+            width: 400px;
+            border: 2px solid red;
+            margin: 30px 0;
+        }
+    </style>
 
     <script src="script.js"></script>
 </body>

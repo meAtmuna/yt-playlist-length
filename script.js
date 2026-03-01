@@ -1,4 +1,5 @@
 const enterBtn = document.getElementById("enter-btn");
+const informationBox = document.getElementById("result");
 const apiKey = "";
 
 function isoConvert(time) {
@@ -17,7 +18,7 @@ function readableTime(totalSec) {
     let mins = Math.floor(totalSec  % 3600 / 60);
     let sec = totalSec % 60;
 
-    return `${hrs.toString().padStart(2,"0")}:${mins.toString().padStart(2,"0")}:${sec.toString().padStart(2,"0")}`;
+    return `${hrs.toString().padStart(2,"0")} Housrs ${mins.toString().padStart(2,"0")} Minutes ${sec.toString().padStart(2,"0")} Seconds`;
 }
 
 enterBtn.addEventListener("click", ()=>{
@@ -59,6 +60,8 @@ enterBtn.addEventListener("click", ()=>{
                     }
                     console.log("total seconds ===> ",totalSec);
                     console.log("hrs mins sec === >", readableTime(totalSec));
+
+                    informationBox.innerText = `Playlist Total Duration: ${readableTime(totalSec)}`;
                     
                     
                 })
