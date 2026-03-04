@@ -1,6 +1,6 @@
 const enterBtn = document.getElementById("enter-btn");
 const informationBox = document.getElementById("result");
-const apiKey = "";
+const apiKey = "AIzaSyDSEADxFNhw3jn6jvUjAi1oxQ_wbKZMGOI";
 
 function isoConvert(time) {
     const result = time.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
@@ -28,52 +28,73 @@ enterBtn.addEventListener("click", ()=>{
     let playlistId = url.searchParams.get("list")
     // console.log("Youtube Playlist Id ===> ", playlistId)
 
-    fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${playlistId}&maxResults=50&key=${apiKey}`)
+    fetch(`https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&id=${playlistId}&key=${apiKey}`)
         .then((res) => res.json())
-        .then((data)=>{
-            // console.log("result ===>", data.items);
-            let videoIds = []
+        .then(playlistData =>{
+            console.log("playlist data result ===>",playlistData);
 
-            for (let i = 0; i < data.items.length; i++) {
-
-                let videoId = data.items[i].contentDetails.videoId
-                videoIds.push(videoId)
-            }
-            // console.log("all video ids ===>", videoIds);
+            const playlistName = playlistData.items[0].snippet.title;
+            const creatorName= playlistData.items[0].snippet.channelTitle;
+            const totalVideos = playlistData.items[0].contentDetails.itemCount;
             
-            fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoIds.join(",")}&key=${apiKey}`)
+            
+            fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${playlistId}&maxResults=50&key=${apiKey}`)
                 .then((res) => res.json())
-                .then((videoData) => {
-                    console.log("result ===>",videoData.items);
-
-                    let totalSec = 0;
-                    
-                    for (let i = 0; i < videoData.items.length; i++) {
-
-                        let duration = videoData.items[i].contentDetails.duration;
-                        let seconds = isoConvert(duration);
-                        // console.log("video durataion ===>", duration);
-                        
-                        totalSec += seconds;
-                        console.log("seconds ===>",seconds);
-
+                .then((data)=>{
+                    // console.log("result ===>", data.items);
+                    let videoIds = []
+        
+                    for (let i = 0; i < data.items.length; i++) {
+        
+                        let videoId = data.items[i].contentDetails.videoId
+                        videoIds.push(videoId)
                     }
-                    console.log("total seconds ===> ",totalSec);
-                    console.log("hrs mins sec === >", readableTime(totalSec));
+                    // console.log("all video ids ===>", videoIds);
+                    
+                    fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoIds.join(",")}&key=${apiKey}`)
+                        .then((res) => res.json())
+                        .then((videoData) => {
+                            console.log("result ===>",videoData.items);
+            
+                            let totalSec = 0;
+                            
+                            for (let i = 0; i < videoData.items.length; i++) {
+            
+                                let duration = videoData.items[i].contentDetails.duration;
+                                let seconds = isoConvert(duration);
+                                // console.log("video durataion ===>", duration);
+                                
+                                totalSec += seconds;
+                                console.log("seconds ===>",seconds);
+            
+                            }
+                            console.log("total seconds ===> ",totalSec);
+                            console.log("hrs mins sec === >", readableTime(totalSec));
+            
+                            informationBox.innerHTML = `
+                                <h2><strong>Playlist Name:</strong>${playlistName}</h2>
+                                <p><strong>Creator Name:</strong>${creatorName}</p>
+                                <p><strong>Total Videos:</strong>${totalVideos}</p>
+                                <p><strong>Total Duration:</strong>${readableTime(totalSec)}</p>`;
+                            
+                            
+                        })
+                        .catch((error)=>{
+                            console.log("erro ===>", error);
+                            
+                        })
 
-                    informationBox.innerText = `Playlist Total Duration: ${readableTime(totalSec)}`;
-                    
-                    
                 })
                 .catch((error)=>{
-                    console.log("erro ===>", error);
+                    console.log("error ===>", error);
                     
                 })
-            
-        })
-        .catch((error)=>{
-            console.log("error ===>", error);
-            
-        })
+
+        })  
+        .catch((error) =>{
+                    console.log("error ===>", error);
+        })          
+                    
+                            
 });
 
