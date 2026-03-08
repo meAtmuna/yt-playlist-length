@@ -16,7 +16,7 @@ function readableTime(totalSec) {
     
     let hrs = Math.floor(totalSec / 3600);
     let mins = Math.floor(totalSec  % 3600 / 60);
-    let sec = totalSec % 60;
+    let sec = Math.floor(totalSec % 60);
 
     return `${hrs.toString().padStart(2,"0")} Housrs ${mins.toString().padStart(2,"0")} Minutes ${sec.toString().padStart(2,"0")} Seconds`;
 }
@@ -37,58 +37,84 @@ enterBtn.addEventListener("click", ()=>{
             const creatorName= playlistData.items[0].snippet.channelTitle;
             const totalVideos = playlistData.items[0].contentDetails.itemCount;
             
-            
-            fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${playlistId}&maxResults=50&key=${apiKey}`)
-                .then((res) => res.json())
-                .then((data)=>{
-                    // console.log("result ===>", data.items);
-                    let videoIds = []
-        
-                    for (let i = 0; i < data.items.length; i++) {
-        
-                        let videoId = data.items[i].contentDetails.videoId
-                        videoIds.push(videoId)
-                    }
-                    // console.log("all video ids ===>", videoIds);
-                    
-                    fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoIds.join(",")}&key=${apiKey}`)
-                        .then((res) => res.json())
-                        .then((videoData) => {
-                            console.log("result ===>",videoData.items);
-            
-                            let totalSec = 0;
-                            
-                            for (let i = 0; i < videoData.items.length; i++) {
-            
-                                let duration = videoData.items[i].contentDetails.duration;
-                                let seconds = isoConvert(duration);
-                                // console.log("video durataion ===>", duration);
-                                
-                                totalSec += seconds;
-                                console.log("seconds ===>",seconds);
-            
-                            }
-                            console.log("total seconds ===> ",totalSec);
-                            console.log("hrs mins sec === >", readableTime(totalSec));
-            
-                            informationBox.innerHTML = `
-                                <h2><strong>Playlist Name:</strong>${playlistName}</h2>
-                                <p><strong>Creator Name:</strong>${creatorName}</p>
-                                <p><strong>Total Videos:</strong>${totalVideos}</p>
-                                <p><strong>Total Duration:</strong>${readableTime(totalSec)}</p>`;
-                            
-                            
-                        })
-                        .catch((error)=>{
-                            console.log("erro ===>", error);
-                            
-                        })
+            let videoIds = []
+            let nxtPageTkn = "";
 
-                })
-                .catch((error)=>{
-                    console.log("error ===>", error);
+            fetchAllPlaylistVideos();
+
+            function fetchAllPlaylistVideos() {
+            
+                fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${playlistId}&maxResults=50&pageToken=${nxtPageTkn}&key=${apiKey}`)
+                    .then((res) => res.json())
+                    .then((data)=>{
+                        // console.log("result ===>", data.items);
+            
+                        for (let i = 0; i < data.items.length; i++) {
+            
+                            let videoId = data.items[i].contentDetails.videoId
+                            videoIds.push(videoId)
+                        }
+                        // console.log("all video ids ===>", videoIds);
+
+                        if (data.nextPageToken) {
+                            
+                            nxtPageTkn =  data.nextPageToken;
+                            fetchAllPlaylistVideos();
+
+                        }else{
+                            let totalSec = 0;
+
+                            async function calculatePlaylistDuration() {
+
+                                for (let i = 0; i < videoIds.length; i += 50) {
+
+                                    let videoGroup = videoIds.slice(i, i + 50);
+                                    
+                                    let res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoGroup.join(",")}&key=${apiKey}`)
+                                    let videoData = await res.json()
+                                    
+                                    console.log("result ===>",videoData.items);
+                                    for (let j = 0; j < videoData.items.length; j++) {
                     
-                })
+                                        let duration = videoData.items[j].contentDetails.duration;
+                                        let seconds = isoConvert(duration);
+                                        // console.log("video durataion ===>", duration);
+                                        
+                                        totalSec += seconds;
+                                        // console.log("seconds ===>",seconds);
+                    
+                                    }
+                                    
+                                }   
+                                    
+                                    // console.log("total seconds ===> ",totalSec);
+                                    // console.log("hrs mins sec === >", readableTime(totalSec));
+                                    
+                                    let speed125x = readableTime(Math.floor(totalSec / 1.25));
+                                    let speed150x = readableTime(Math.floor(totalSec / 1.5));
+                                    let speed2x = readableTime(Math.floor(totalSec / 2));
+                                    
+                                    informationBox.innerHTML = `
+                                    <h2><strong>Playlist Name:</strong>${playlistName}</h2>
+                                    <p><strong>Creator Name:</strong>${creatorName}</p>
+                                    <p><strong>Total Videos:</strong>${totalVideos}</p>
+                                    <p><strong>Total Duration:</strong>${readableTime(totalSec)}</p>
+                                    <p><strong>1.25x Duration:</strong>${speed125x}</p>
+                                    <p><strong>1.5x Duration:</strong>${speed150x}</p>
+                                    <p><strong>2x Duration:</strong>${speed2x}</p>
+                                    `;
+                            }
+
+                            calculatePlaylistDuration();
+
+                        }    
+
+                    })
+                    .catch((error)=>{
+                        console.log("error ===>", error);
+                        
+                    })
+            }
 
         })  
         .catch((error) =>{
