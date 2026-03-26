@@ -95,13 +95,21 @@ enterBtn.addEventListener("click", ()=>{
                                     let speed2x = readableTime(Math.floor(totalSec / 2));
                                     
                                     informationBox.innerHTML = `
-                                    <h2><strong>Playlist Name:</strong>${playlistName}</h2>
-                                    <p><strong>Creator Name:</strong>${creatorName}</p>
-                                    <p><strong>Total Videos:</strong>${totalVideos}</p>
-                                    <p><strong>Total Duration:</strong>${readableTime(totalSec)}</p>
-                                    <p><strong>1.25x Duration:</strong>${speed125x}</p>
-                                    <p><strong>1.5x Duration:</strong>${speed150x}</p>
-                                    <p><strong>2x Duration:</strong>${speed2x}</p>
+                                    <div class="result-card">
+                                        <div class="result-head">
+                                            <div>
+                                                <h2 class="playlist-name">${playlistName}</h2>
+                                                <p class="creator-name">${creatorName}</p>
+                                            </div>
+                                            <p class="total-videos">${totalVideos} Videos</p>
+                                        </div>
+                                        <div class="duration">
+                                            <p><strong>Total Duration:</strong>${readableTime(totalSec)}</p>
+                                            <p><strong>1.25x Duration:</strong>${speed125x}</p>
+                                            <p><strong>1.5x Duration:</strong>${speed150x}</p>
+                                            <p><strong>2x Duration:</strong>${speed2x}</p>
+                                        </div>
+                                    </div>
                                     `;
                             }
 
