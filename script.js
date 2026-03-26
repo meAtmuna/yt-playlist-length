@@ -18,7 +18,7 @@ function readableTime(totalSec) {
     let mins = Math.floor(totalSec  % 3600 / 60);
     let sec = Math.floor(totalSec % 60);
 
-    return `${hrs.toString().padStart(2,"0")} Housrs ${mins.toString().padStart(2,"0")} Minutes ${sec.toString().padStart(2,"0")} Seconds`;
+    return `${hrs.toString().padStart(2,"0")}H ${mins.toString().padStart(2,"0")}M ${sec.toString().padStart(2,"0")}S`;
 }
 
 enterBtn.addEventListener("click", ()=>{
@@ -104,10 +104,22 @@ enterBtn.addEventListener("click", ()=>{
                                             <p class="total-videos">${totalVideos} Videos</p>
                                         </div>
                                         <div class="duration">
-                                            <p><strong>Total Duration:</strong>${readableTime(totalSec)}</p>
-                                            <p><strong>1.25x Duration:</strong>${speed125x}</p>
-                                            <p><strong>1.5x Duration:</strong>${speed150x}</p>
-                                            <p><strong>2x Duration:</strong>${speed2x}</p>
+                                            <div class="duration-grid main">
+                                                <p class="grid-label">Total Duration</p>
+                                                <p class="grid-time">${readableTime(totalSec)}<p>
+                                            </div>
+                                            <div class="duration-grid">
+                                                <p class="grid-label">At 1.25x Speed</p>
+                                                <p class="grid-time">${speed125x}</p>
+                                            </div>
+                                            <div class="duration-grid">
+                                                <p class="grid-label">At 1.5x Speed</p>
+                                                <p class="grid-time">${speed150x}</p>
+                                            </div>
+                                            <div class="duration-grid end">
+                                                <p class="grid-label">At 2x Speed</p>
+                                                <p class="grid-time">${speed2x}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     `;
