@@ -31,7 +31,7 @@ Users just need to enter the playlist URL, and the app gets all the video times 
 4. Wait for the results to appear in the Result section.
 
 ## Screenshot
-![Youtube Playlist length Screenshot](Screenshot.png)
+![Youtube Playlist length Screenshot](images/Screenshot.png)
 
 ## Future Improvements
 * Add error handling for invalid playlist URLs.
