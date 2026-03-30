@@ -1,5 +1,6 @@
 const enterBtn = document.getElementById("enter-btn");
 const informationBox = document.getElementById("result");
+const errorMsg = document.getElementById("error-msg")
 const apiKey = "AIzaSyDSEADxFNhw3jn6jvUjAi1oxQ_wbKZMGOI";
 
 function isoConvert(time) {
@@ -22,16 +23,44 @@ function readableTime(totalSec) {
 }
 
 enterBtn.addEventListener("click", ()=>{
-    let urlInput = document.getElementById("playlist-url").value;
+    let urlInput = document.getElementById("playlist-url").value.trim();
 
-    let url = new URL(urlInput)
-    let playlistId = url.searchParams.get("list")
+    errorMsg.style.display = "none";
+    informationBox.innerHTML = "";
+
+    if (urlInput === "") {
+        errorMsg.textContent = "Please enter YouTube playlist URL.";
+        errorMsg.style.display = "block";
+        return;
+    }
+
+    let playlistId;
+    try {
+        let url = new URL(urlInput)
+        playlistId = url.searchParams.get("list")
+        
+        if (!playlistId) {
+            errorMsg.textContent = "Invalid Playlist URL";
+            errorMsg.style.display = "block";
+            return;
+        }
+    } catch {
+        errorMsg.textContent = "Enter a valid URL";
+        errorMsg.style.display = "block";
+        return
+    }
     // console.log("Youtube Playlist Id ===> ", playlistId)
 
     fetch(`https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&id=${playlistId}&key=${apiKey}`)
         .then((res) => res.json())
         .then(playlistData =>{
             console.log("playlist data result ===>",playlistData);
+
+            if (!playlistData.items || playlistData.items.length === 0) {
+                errorMsg.textContent = "Playlist not found";
+                errorMsg.style.display = "block";
+                return;
+            }
 
             const playlistName = playlistData.items[0].snippet.title;
             const creatorName= playlistData.items[0].snippet.channelTitle;
@@ -106,7 +135,7 @@ enterBtn.addEventListener("click", ()=>{
                                         <div class="duration">
                                             <div class="duration-grid main">
                                                 <p class="grid-label">Total Duration</p>
-                                                <p class="grid-time">${readableTime(totalSec)}<p>
+                                                <p class="grid-time">${readableTime(totalSec)}</p>
                                             </div>
                                             <div class="duration-grid">
                                                 <p class="grid-label">At 1.25x Speed</p>
@@ -139,6 +168,8 @@ enterBtn.addEventListener("click", ()=>{
         })  
         .catch((error) =>{
                     console.log("error ===>", error);
+                    errorMsg.textContent = "Something went wrong";
+                    errorMsg.style.display = "block";
         })          
                     
                             

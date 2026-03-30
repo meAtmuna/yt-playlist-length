@@ -104,6 +104,13 @@ header{
     font-family: 'Bebas Neue', sans-serif;
 }
 
+#error-msg{
+    color: var(--red);
+    display: none;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
 #result{
     margin-top: 40px;
 }
