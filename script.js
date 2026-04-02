@@ -29,7 +29,7 @@ enterBtn.addEventListener("click", ()=>{
     informationBox.innerHTML = "";
 
     if (urlInput === "") {
-        errorMsg.textContent = "Please enter YouTube playlist URL.";
+        errorMsg.textContent = "! Please enter YouTube playlist URL.";
         errorMsg.style.display = "block";
         return;
     }
@@ -40,15 +40,24 @@ enterBtn.addEventListener("click", ()=>{
         playlistId = url.searchParams.get("list")
         
         if (!playlistId) {
-            errorMsg.textContent = "Invalid Playlist URL";
+            errorMsg.textContent = "! Invalid Playlist URL";
             errorMsg.style.display = "block";
             return;
         }
     } catch {
-        errorMsg.textContent = "Enter a valid URL";
+        errorMsg.textContent = "! Enter a valid URL";
         errorMsg.style.display = "block";
         return
     }
+
+    enterBtn.classList.add("loading");
+    enterBtn.innerHTML = `
+    <span class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+    `;
     // console.log("Youtube Playlist Id ===> ", playlistId)
 
     fetch(`https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&id=${playlistId}&key=${apiKey}`)
@@ -57,8 +66,10 @@ enterBtn.addEventListener("click", ()=>{
             console.log("playlist data result ===>",playlistData);
 
             if (!playlistData.items || playlistData.items.length === 0) {
-                errorMsg.textContent = "Playlist not found";
+                errorMsg.textContent = "! Playlist not found";
                 errorMsg.style.display = "block";
+                enterBtn.classList.remove("loading");
+                enterBtn.textContent = "Get Playlist length";
                 return;
             }
 
@@ -138,20 +149,26 @@ enterBtn.addEventListener("click", ()=>{
                                                 <p class="grid-time">${readableTime(totalSec)}</p>
                                             </div>
                                             <div class="duration-grid">
+                                                <p class="speed-badge">1.25x</p>
                                                 <p class="grid-label">At 1.25x Speed</p>
                                                 <p class="grid-time">${speed125x}</p>
                                             </div>
                                             <div class="duration-grid">
+                                                <p class="speed-badge">1.5x</p>
                                                 <p class="grid-label">At 1.5x Speed</p>
                                                 <p class="grid-time">${speed150x}</p>
                                             </div>
                                             <div class="duration-grid end">
+                                                <p class="speed-badge">2x</p>
                                                 <p class="grid-label">At 2x Speed</p>
                                                 <p class="grid-time">${speed2x}</p>
                                             </div>
                                         </div>
                                     </div>
                                     `;
+
+                                    enterBtn.classList.remove("loading");
+                                    enterBtn.textContent = "Get Playlist length";
                             }
 
                             calculatePlaylistDuration();
@@ -161,15 +178,18 @@ enterBtn.addEventListener("click", ()=>{
                     })
                     .catch((error)=>{
                         console.log("error ===>", error);
-                        
+                        enterBtn.classList.remove("loading");
+                        enterBtn.textContent = "Get Playlist length";
                     })
             }
 
         })  
         .catch((error) =>{
                     console.log("error ===>", error);
-                    errorMsg.textContent = "Something went wrong";
+                    errorMsg.textContent = "! Something went wrong";
                     errorMsg.style.display = "block";
+                    enterBtn.classList.remove("loading");
+                    enterBtn.textContent = "Get Playlist length";
         })          
                     
                             

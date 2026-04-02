@@ -34,7 +34,7 @@ Users just need to enter the playlist URL, and the app gets all the video times 
 ![Youtube Playlist length Screenshot](images/Screenshot.png)
 
 ## Future Improvements
-* <!-- Add error handling for invalid playlist URLs. --> done -->
+* <!-- Add error handling for invalid playlist URLs. --> done
 * Allow multiple playlists calculation at once.
 * Include dark/light theme toggle.
 * Improve loading indicators while fetching videos.
