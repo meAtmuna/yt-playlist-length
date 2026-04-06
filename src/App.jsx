@@ -2,6 +2,8 @@ import { useState } from 'react';
 import './App.css'
 import youtubeLogo from './assets/youtube.png';
 
+const apiKey = import.meta.env.VITE_API_KEY;
+
 function App() {
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -31,6 +33,27 @@ function App() {
     }
 
     console.log("Youtube Playlist Id ===> ", playlistId);
+
+    fetch(`https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&id=${playlistId}&key=${apiKey}`)
+        .then((res) => res.json())
+        .then(playlistData =>{
+            console.log("playlist data result ===>",playlistData);
+
+            if (!playlistData.items || playlistData.items.length === 0) {
+                setErrorMsg("! Playlist not found");
+                return;
+            }
+
+            const playlistName = playlistData.items[0].snippet.title;
+            const creatorName= playlistData.items[0].snippet.channelTitle;
+            const totalVideos = playlistData.items[0].contentDetails.itemCount;
+
+            console.log("name ===>", playlistName, "creator-name ===>",creatorName,  "videos ===>", totalVideos);
+
+        })
+        .catch(() => {
+          setErrorMsg("! something went wrong");
+        });
   }
   return (
     <>

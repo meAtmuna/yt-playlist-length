@@ -1,7 +1,7 @@
 const enterBtn = document.getElementById("enter-btn");
 const informationBox = document.getElementById("result");
 const errorMsg = document.getElementById("error-msg")
-const apiKey = "AIzaSyDSEADxFNhw3jn6jvUjAi1oxQ_wbKZMGOI";
+const apiKey = "";
 
 function isoConvert(time) {
     const result = time.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
