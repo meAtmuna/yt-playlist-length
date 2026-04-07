@@ -7,6 +7,7 @@ const apiKey = import.meta.env.VITE_API_KEY;
 function App() {
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [playlistInfo, setPlaylistInfo] = useState(null);
 
   const getPlaylistData = () => {
     setErrorMsg("");
@@ -48,6 +49,12 @@ function App() {
             const creatorName= playlistData.items[0].snippet.channelTitle;
             const totalVideos = playlistData.items[0].contentDetails.itemCount;
 
+            setPlaylistInfo({
+              name: playlistName,
+              creator: creatorName,
+              videos: totalVideos
+            });
+
             console.log("name ===>", playlistName, "creator-name ===>",creatorName,  "videos ===>", totalVideos);
 
         })
@@ -84,8 +91,19 @@ function App() {
             </div>
             {errorMsg && <p id="error-msg">{errorMsg}</p>}
         </div>
-
-        <div id="result"></div>
+        {playlistInfo &&(
+          <div id="result">
+            <div className="result-card">
+              <div className="result-head">
+                <div>
+                  <h2 className="playlist-name">{playlistInfo.name}</h2>
+                  <p className="creator-name">{playlistInfo.creator}</p>
+                </div>
+                  <p className="total-videos">{playlistInfo.videos} Videos</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   )
