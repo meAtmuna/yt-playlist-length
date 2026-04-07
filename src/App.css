@@ -77,7 +77,7 @@ header{
     gap: 10px;
 }
 
-#playlist-url{
+.playlist-url{
     flex: 1;
     background: var(--card);
     border: 1px solid var(--border);
@@ -89,16 +89,16 @@ header{
     color: var(--text);
 }
 
-#playlist-url::placeholder{
+.playlist-url::placeholder{
     color: #918e8e;
 }
 
-#playlist-url:focus{
+.playlist-url:focus{
     border-color: var(--red);
     box-shadow: 0 0 0 3px rgba(255,0,51,0.1);
 }
 
-#enter-btn{
+.enter-btn{
     background: var(--red);
     color: white;
     border-radius: 10px;
@@ -110,17 +110,17 @@ header{
     font-family: 'Bebas Neue', sans-serif;
 }
 
-#enter-btn:hover{
+.enter-btn:hover{
     background: #e6002e;
     transform: translateY(-1px);
     box-shadow: 0 6px 20px  rgba(255,0,51,0.35);
 }
 
-#enter-btn:active{
+.enter-btn:active{
     transform: translateY(0);
 }
 
-#enter-btn.loading{
+.enter-btn.loading{
     pointer-events: none;
     background: #333;
     color: #666;
@@ -147,14 +147,14 @@ header{
     animation-delay: 0.3s;
 }
 
-#error-msg{
+.error-msg{
     color: #ec4242;
     /* display: none; */
     margin-top: 12px;
     font-size: 14px;
 }
 
-#result{
+.result{
     margin-top: 40px;
 }
 
