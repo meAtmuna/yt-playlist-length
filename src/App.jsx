@@ -94,7 +94,7 @@ function App() {
 
                 });
 
-                if (!data.nxtPageTkn) break;
+                if (!data.nextPageToken) break;
                 nxtPageTkn = data.nextPageToken;
 
               }
@@ -168,7 +168,7 @@ function App() {
             </div>
             {errorMsg && <p className="error-msg">{errorMsg}</p>}
         </div>
-        {playlistInfo &&(
+        {playlistInfo && durationInfo && (
           <div className="result">
             <div className="result-card">
               <div className="result-head">
