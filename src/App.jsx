@@ -129,37 +129,40 @@ function App() {
   }
   return (
     <>
-      <div className="main-container">
-        <header>
+      <div className="w-full max-w-[800px] animate-[fadeDown_0.6s_ease]">
+        <header className="flex gap-4  mb-12">
             <div className="logo-icon">
-                <img src={youtubeLogo} alt="logo"/>
+              <img src={youtubeLogo} alt="logo" className="w-[60px] h-[60px]"/>
             </div>
             <div className="head-text">
-                <h1>Youtube Playlist length</h1>
-                <p>Calculate total time duration of any YouTube playlist</p>
+                <h1 className="font-bebas text-[50px] tracking-[2px]">Youtube Playlist length</h1>
+                <p className="text-[15px] text-muted mt-[3px] font-normal ml-1">Calculate total time duration of any YouTube playlist</p>
             </div>
         </header>
 
-        <div className="input-section">
-            <label className="input-label" htmlFor="playlist-url">Playlist URL</label>    
-            <div className="input-row">    
+        <div className="input-section animate-[fadeUp_0.6s_0.1s_ease]">
+            <label className="input-label text-[13px] tracking-[2px] uppercase text-muted mb-[10px] block" htmlFor="playlist-url">Playlist URL</label>    
+            <div className="input-row flex gap-[10px]">    
                 <input
+                  id="playlist-url"
                   type="url" 
-                  className="playlist-url" 
+                  className="playlist-url flex-1 bg-card border border-border rounded-[10px] px-[18px] py-[14px] font-dm text-[14px] text-text outline-none placeholder:text-[#918e8e] focus:border-red focus:ring-4 focus:ring-red/10" 
                   placeholder="https://www.youtube.com/playlist?list=..."
                   value={playlistUrl}
                   onChange={(e) => setPlaylistUrl(e.target.value)}
                 />
                 <button 
-                  className={`enter-btn ${loading ? "loading" : ""}`}
+                  className={`enter-btn bg-red text-white rounded-[10px] py-[14px] px-[22px] text-[16px] cursor-pointer tracking-[1.5px] font-bebas border-none
+                    hover:bg-[#e6002e] hover:translate-y-[1px] hover:shadow-[0_6px_20px_rgba(255,0,51,0.35)] active:translate-y-0
+                    ${loading ? "loading pointer-events-none bg-[#333] text-[#666]" : ""}`}
                   onClick={getPlaylistData} 
                   disabled={loading}
                 >
                   {loading ? (
-                    <span className="dots">
-                      <span></span>
-                      <span></span>
-                      <span></span>
+                    <span className="dots flex gap-[4px]">
+                      <span className="w-[5px] h-[5px] rounded-full bg-[#666] animate-bounce [animation-delay:0s]"></span>
+                      <span className="w-[5px] h-[5px] rounded-full bg-[#666] animate-bounce [animation-delay:0.15s]"></span>
+                      <span className="w-[5px] h-[5px] rounded-full bg-[#666] animate-bounce [animation-delay:0.3s]"></span>
                     </span>
                   ) : (
                     "Get Playlist length"

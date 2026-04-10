@@ -1,4 +1,6 @@
-:root{
+/* @import "tailwindcss"; */
+
+/* :root{
     --red: #FF0033;
     --dark: #0A0A0A;
     --card: #131313;
@@ -21,7 +23,7 @@ body{
     /* padding: 40px 20px 60px; */
     /* display: flex;
     flex-direction: column;
-    align-items: center; */
+    align-items: center;
 }
 
 #root{
@@ -156,7 +158,7 @@ header{
 
 .error-msg{
     color: #ec4242;
-    /* display: none; */
+    /* display: none; 
     margin-top: 12px;
     font-size: 14px;
 }
@@ -271,7 +273,7 @@ header{
 .end{
     grid-column: 1 / -1;
     border-top: 1px solid var(--border);
-}
+} */
 
 @keyframes fadeDown{
     from{
